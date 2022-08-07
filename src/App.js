@@ -10,22 +10,26 @@ import { AddTransaction } from './components/AddTransaction';
 import './App.css';
 
 function App() {
-    const { api, expenses } = useContext(FirebaseContext);
+    const { firebase: {api}, expenses } = useContext(FirebaseContext);
     
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
         const fetchExpenses = async () => {
             const expenses = await api.getExpenses();
-            setTransactions(expenses);
+            // setTransactions(expenses);
         }
         fetchExpenses();
     }, []);
 
-    const addTransaction = (transaction) => {
-        api.addExpense(transaction.text, transaction.amount);
-        const tempTransactions = [transaction, ...transactions];
-        setTransactions(tempTransactions);
+    useEffect(() => {
+        console.log(`expenses : ${JSON.stringify(expenses)}`)
+    }, [expenses]);
+
+    const addTransaction = async (transaction) => {
+        await api.addExpense(transaction.text, transaction.amount);
+        // const tempTransactions = [transaction, ...transactions];
+        // setTransactions(tempTransactions);
     };
 
     const deleteTransaction = (id) => {
@@ -37,9 +41,9 @@ function App() {
         <Fragment>
             <Header />
             <div className="container">
-                <Balance transactions={transactions}/>
-                <IncomeExpenses transactions={transactions}/>
-                <TransactionList transactions={transactions} deleteTransaction={deleteTransaction}/>
+                <Balance transactions={expenses}/>
+                <IncomeExpenses transactions={expenses}/>
+                <TransactionList transactions={expenses} deleteTransaction={deleteTransaction}/>
                 <AddTransaction addTransaction={addTransaction}/>
             </div>
         </Fragment>
