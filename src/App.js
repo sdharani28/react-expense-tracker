@@ -1,4 +1,6 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect, useContext } from 'react';
+import { FirebaseContext } from './firebase/firebase';
+
 import { Header } from './components/Header';
 import { Balance } from './components/Balance';
 import { IncomeExpenses } from './components/IncomeExpenses';
@@ -8,10 +10,20 @@ import { AddTransaction } from './components/AddTransaction';
 import './App.css';
 
 function App() {
-
+    const { api, expenses } = useContext(FirebaseContext);
+    
     const [transactions, setTransactions] = useState([]);
 
+    useEffect(() => {
+        const fetchExpenses = async () => {
+            const expenses = await api.getExpenses();
+            setTransactions(expenses);
+        }
+        fetchExpenses();
+    }, []);
+
     const addTransaction = (transaction) => {
+        api.addExpense(transaction.text, transaction.amount);
         const tempTransactions = [transaction, ...transactions];
         setTransactions(tempTransactions);
     };
