@@ -23,7 +23,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        console.log(`expenses : ${JSON.stringify(expenses)}`)
     }, [expenses]);
 
     const addTransaction = async (transaction) => {

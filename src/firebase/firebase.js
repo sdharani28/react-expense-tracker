@@ -71,7 +71,6 @@ function FirebaseProvider({ children }) {
                         id: key
                     });
                 }
-                console.log(`_records : ${JSON.stringify(_records)}`)
                 setExpenses(_records);
             })
         } catch (error) {
