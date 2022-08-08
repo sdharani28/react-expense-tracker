@@ -15,7 +15,6 @@ function FirebaseProvider({ children }) {
     let firebase = {
         app: null,
         database: null,
-        expenses: []
     }
 
     // check if firebase app has been initialized previously
@@ -28,7 +27,8 @@ function FirebaseProvider({ children }) {
 
             api: {
                 getExpenses,
-                addExpense
+                addExpense,
+                deleteExpense
             },
         }
     }
@@ -66,6 +66,15 @@ function FirebaseProvider({ children }) {
 
         } catch (error) {
             console.error(`error while adding transaction :: ${error}`);
+        }
+    }
+
+    async function deleteExpense(docId){
+        try {
+            const ref = await firebase.database.ref('expenses');
+            await ref.child(docId).remove();
+        }catch (error) {
+            console.error(`error while deleting expense :: ${error}`);
         }
     }
 

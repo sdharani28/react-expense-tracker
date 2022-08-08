@@ -10,7 +10,7 @@ import { AddTransaction } from './components/AddTransaction';
 import './App.css';
 
 function App() {
-    const { api, expenses } = useContext(FirebaseContext);
+    const { api } = useContext(FirebaseContext);
     
     const [transactions, setTransactions] = useState([]);
 
@@ -28,7 +28,8 @@ function App() {
         setTransactions(tempTransactions);
     };
 
-    const deleteTransaction = (id) => {
+    const deleteTransaction = async (id) => {
+        const docId = await api.deleteExpense(id);
         const tempTransactions = transactions.filter(transaction => transaction.id !== id  );
         setTransactions(tempTransactions);
     };
