@@ -22,9 +22,9 @@ function App() {
         fetchExpenses();
     }, []);
 
-    const addTransaction = (transaction) => {
-        api.addExpense(transaction.text, transaction.amount);
-        const tempTransactions = [transaction, ...transactions];
+    const addTransaction = async (transaction) => {
+        const docId = await api.addExpense(transaction.text, transaction.amount);
+        const tempTransactions = [...transactions, {...transaction, id: docId}];
         setTransactions(tempTransactions);
     };
 

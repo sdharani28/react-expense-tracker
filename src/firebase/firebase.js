@@ -30,8 +30,6 @@ function FirebaseProvider({ children }) {
                 getExpenses,
                 addExpense
             },
-
-            expenses: []
         }
     }
 
@@ -49,8 +47,6 @@ function FirebaseProvider({ children }) {
                 });
             }
 
-            firebase = { ...firebase, expenses: _records }
-
             return _records;
         } catch (error) {
             console.error(`error while getExpenses :: ${error}`);
@@ -59,14 +55,15 @@ function FirebaseProvider({ children }) {
 
     async function addExpense(itemTitle, itemAmount) {
         try {
-            const doc = await firebase.database.ref('expenses').push().set({
+            const ref = await firebase.database.ref('expenses');
+            const res = await ref.push({
                 text: itemTitle,
                 amount: itemAmount
             });
-            console.log(`doc : ${JSON.stringify(doc)}`);
-            let tempExpenses = [...firebase.expenses];
-            tempExpenses.push(doc);
-            firebase = { ...firebase, expenses: tempExpenses }
+
+            const docId = res.getKey();
+            return docId;
+
         } catch (error) {
             console.error(`error while adding transaction :: ${error}`);
         }
